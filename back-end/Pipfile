@@ -8,6 +8,14 @@ flask = "*"
 flask-cors = "*"
 black = "*"
 pylint = "*"
+numpy = "*"
+eikonalfm = "*"
+matplotlib = "*"
+pandas = "*"
+plotly = "*"
+scikit-image = "*"
+scikit-learn = "*"
+torch = "*"
 
 [dev-packages]
 
