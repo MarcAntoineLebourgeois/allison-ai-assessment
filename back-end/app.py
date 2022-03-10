@@ -5,9 +5,9 @@ app = Flask(__name__)
 CORS(app, resources={r"/*": {"origins": "*"}})
 
 
-@app.route('/hello')
+@app.route("/hello")
 def hello():
-    return 'Hello, World!'
+    return "Hello, World!"
 
 
 if __name__ == "__main__":
