@@ -24,8 +24,8 @@ class LGGDataset(Dataset):
         if torch.is_tensor(idx):
             idx = idx.tolist()
 
-        image = io.imread(self.df.image_path[idx])[:, :, 1].astype(np.float32)/255
-        mask = io.imread(self.df.mask_path[idx]).astype(np.float32)/255
+        image = io.imread(self.df.image_path[idx])[:, :, 1].astype(np.float32) / 255
+        mask = io.imread(self.df.mask_path[idx]).astype(np.float32) / 255
 
         image = np.expand_dims(image, 0)
         mask = np.expand_dims(mask, 0)
@@ -34,4 +34,3 @@ class LGGDataset(Dataset):
             image, mask = self.transform((image, mask))
 
         return torch.from_numpy(image), torch.from_numpy(mask)
-
