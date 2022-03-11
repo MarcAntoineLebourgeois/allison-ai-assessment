@@ -1,7 +1,7 @@
 import cv2, os
 
 base_path = "../data/kaggle_3m/TCGA_CS_4941_19960909/"
-new_path = "../data/images/"
+new_path = "../front-end/src/images/"
 
 for infile in os.listdir(base_path):
     print("file : " + infile)
