@@ -4,10 +4,9 @@ import { SelectChangeEvent, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 import { SelectPatientId, SelectTumorIndice } from "./components";
 import { getTumorIndices } from "./helpers";
-import image from "./images/TCGA_CS_4941_19960909_1.png";
+import { data } from "./data";
 
 const App = () => {
-  const [tumorImage, setTumorImage] = useState<string>();
   const [patientId, setPatientId] = useState<string | null>();
   const handleChange = (event: SelectChangeEvent<string>) =>
     setPatientId(event.target.value as string);
@@ -15,16 +14,28 @@ const App = () => {
   const [tumorIndice, setTumorIndice] = useState<string>();
   const tumorIdHandleChange = (event: SelectChangeEvent<string>) =>
     setTumorIndice(event.target.value as string);
+
   useEffect(() => {
     if (patientId)
       getTumorIndices(patientId).then((tumorIndices) =>
         setTumorIndices(tumorIndices)
       );
   }, [patientId]);
+
+  const [image, setImage] = useState();
+
   useEffect(() => {
-    if (tumorIndice)
-      setTumorImage("../../data/images/TCGA_CS_4941_19960909_1.jpg");
-  }, [tumorIndice]);
+    if (tumorIndice && patientId) {
+      const imageName = `${
+        data[parseInt(patientId) - 1].patientId
+      }_${tumorIndice}`;
+      const fetchImage = async () => {
+        const response = await import(`./images/${imageName}.png`);
+        setImage(response.default);
+      };
+      fetchImage();
+    }
+  }, [tumorIdHandleChange]);
 
   return (
     <div
@@ -44,7 +55,7 @@ const App = () => {
           handleChange={tumorIdHandleChange}
         />
       )}
-      {tumorImage && <img src={image} />}
+      {image && <img src={image} />}
     </div>
   );
 };
