@@ -16,6 +16,8 @@ plotly = "*"
 scikit-image = "*"
 scikit-learn = "*"
 torch = "*"
+opencv-python = "*"
+opencv-python-headless = "*"
 
 [dev-packages]
 
