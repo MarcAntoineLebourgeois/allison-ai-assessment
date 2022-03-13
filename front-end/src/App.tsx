@@ -1,10 +1,12 @@
 /** @jsxImportSource @emotion/react */
 import { css } from "@emotion/react";
-import { SelectChangeEvent, Typography } from "@mui/material";
+import { Button, SelectChangeEvent, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 import { SelectPatientId, SelectTumorIndice } from "./components";
-import { getTumorIndices } from "./helpers";
+import { getHeaders, getTumorIndices } from "./helpers";
 import { data } from "./data";
+import { backEndHost } from "./config";
+import ResultImage from "./images/results.png";
 
 const App = () => {
   const [patientId, setPatientId] = useState<string | null>();
@@ -37,6 +39,29 @@ const App = () => {
     }
   }, [tumorIdHandleChange]);
 
+  type Point = [number, number];
+
+  const [points, setPoints] = useState<Point[]>([]);
+  const onMouseClick = (
+    event: React.MouseEvent<HTMLImageElement, MouseEvent>
+  ) =>
+    setPoints((previousValue) => [
+      ...previousValue,
+      [event.nativeEvent.offsetY, event.nativeEvent.offsetX],
+    ]);
+
+  const onSubmit = (): Promise<void> =>
+    fetch(`${backEndHost}add_point_coordinates/${patientId}/${tumorIndice}`, {
+      method: "POST",
+      mode: "cors",
+      headers: getHeaders(),
+      body: JSON.stringify({ points }),
+    })
+      .then((response) => response.json())
+      .catch((error) => {
+        throw new Error(error);
+      });
+
   return (
     <div
       css={css`
@@ -55,7 +80,13 @@ const App = () => {
           handleChange={tumorIdHandleChange}
         />
       )}
-      {image && <img src={image} />}
+      {image && <img src={image} onClick={onMouseClick} />}
+      {tumorIndice && (
+        <Button variant="contained" onClick={onSubmit}>
+          Click to submit your points
+        </Button>
+      )}
+      {tumorIndice && points.length !== 0 && <img src={ResultImage} />}
     </div>
   );
 };

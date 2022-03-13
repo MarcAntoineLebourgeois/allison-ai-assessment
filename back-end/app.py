@@ -21,6 +21,7 @@ CORS(app, resources={r"/*": {"origins": "*"}})
 def get_tumor_indices_by_patient_id(patient_index):
     image_df = pd.read_csv("../data/image_data.csv")
     patient_id = image_df.patient_id.unique()[int(patient_index) - 1]
+    print(patient_id)
     has_tumor_indices = read_mri(image_df, patient_id)[2]
     return jsonify(has_tumor_indices)
 
@@ -28,14 +29,12 @@ def get_tumor_indices_by_patient_id(patient_index):
 @app.route("/add_point_coordinates/<patient_index>/<tumor_indice>", methods=["POST"])
 def add_point_coordinate(patient_index, tumor_indice):
     mousePoints = request.get_json()["points"]
-    # print("mousePoints", mousePoints)
     image_df = pd.read_csv("../data/image_data.csv")
     patient_id = image_df.patient_id.unique()[int(patient_index) - 1]
     image_stack, mask_stack, tumor_indices = read_mri(image_df, patient_id)
     img = image_stack[int(tumor_indice) - 1, :, :, 1].astype("float") / 255
 
     # convert points to int
-    # print("points", mousePoints)
     points = np.round(mousePoints).astype("int")
 
     # design gradient-based metric
@@ -75,7 +74,7 @@ def add_point_coordinate(patient_index, tumor_indice):
         plt.plot(contour[:, 1], contour[:, 0], c="b", label="GT")
 
     plt.legend()
-    plt.savefig("test.png")
+    plt.savefig("../front-end/src/images/results.png")
     # plt.show()
     return "200"
 
