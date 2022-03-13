@@ -13,10 +13,10 @@ const App = () => {
   const handleChange = (event: SelectChangeEvent<string>) =>
     setPatientId(event.target.value as string);
   const [tumorIndices, setTumorIndices] = useState<string[] | null>();
-  const [tumorIndice, setTumorIndice] = useState<string>();
+  const [tumorIndice, setTumorIndice] = useState<string | null>();
   const tumorIdHandleChange = (event: SelectChangeEvent<string>) =>
     setTumorIndice(event.target.value as string);
-
+  const [isResultVisible, setIsResultVisible] = useState(false);
   useEffect(() => {
     if (patientId)
       getTumorIndices(patientId).then((tumorIndices) =>
@@ -24,7 +24,7 @@ const App = () => {
       );
   }, [patientId]);
 
-  const [image, setImage] = useState();
+  const [image, setImage] = useState<string | null>();
 
   useEffect(() => {
     if (tumorIndice && patientId) {
@@ -57,10 +57,21 @@ const App = () => {
       headers: getHeaders(),
       body: JSON.stringify({ points }),
     })
-      .then((response) => response.json())
+      .then((response) => {
+        response.json();
+        setIsResultVisible(true);
+      })
       .catch((error) => {
         throw new Error(error);
       });
+  const onReset = () => {
+    setPatientId(null);
+    setTumorIndices(null);
+    setTumorIndice(null);
+    setPoints([]);
+    setIsResultVisible(false);
+    setImage(null);
+  };
 
   return (
     <div
@@ -86,7 +97,10 @@ const App = () => {
           Click to submit your points
         </Button>
       )}
-      {tumorIndice && points.length !== 0 && <img src={ResultImage} />}
+      <Button variant="contained" onClick={onReset}>
+        Reset all settings
+      </Button>
+      {isResultVisible && <img src={ResultImage} />}
     </div>
   );
 };
