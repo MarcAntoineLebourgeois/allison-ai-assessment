@@ -1,4 +1,5 @@
 """ Back-end app running with Flask """
+from calendar import c
 import time
 import numpy as np
 import matplotlib.pyplot as plt
@@ -59,17 +60,17 @@ def add_point_coordinate(patient_index, tumor_indice):
 
     plt.subplot(131), plt.imshow(metric, "jet"), plt.title("Metric")
     for curve in curves:
-        plt.plot(curve[:, 1], curve[:, 0], curve="yellow")
+        plt.plot(curve[:, 1], curve[:, 0], c="yellow")
 
     plt.subplot(132), plt.imshow(dist_map, "jet"), plt.title("Distance map")
     for curve in curves:
-        plt.plot(curve[:, 1], curve[:, 0], curve="r")
-    plt.scatter(points[:, 1], points[:, 0], curve="y")
+        plt.plot(curve[:, 1], curve[:, 0], c="r")
+    plt.scatter(points[:, 1], points[:, 0], c="y")
 
     plt.subplot(133), plt.imshow(img, "gray"), plt.title("Result")
     for curve in curves[:-1]:
-        plt.plot(curve[:, 1], curve[:, 0], curve="r")
-    plt.plot(curve[-1, 1], curve[-1, 0], curve="r", label="Fast-Marching")
+        plt.plot(curve[:, 1], curve[:, 0], c="r")
+    plt.plot(curve[-1, 1], curve[-1, 0], c="r", label="Fast-Marching")
     contours = find_contours(mask_stack[int(tumor_indice)], 1)
     for contour in contours:
         plt.plot(contour[:, 1], contour[:, 0], c="b", label="GT")
