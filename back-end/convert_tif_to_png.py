@@ -1,24 +1,26 @@
-import cv2, os
+"""Convert all files in the folder from tif to png format into frontend/images"""
+import os
+import cv2
 
-base_path1 = "../data/kaggle_3m/TCGA_CS_4941_19960909/"
-base_path2 = "../data/kaggle_3m/TCGA_CS_4942_19970222/"
-base_path3 = "../data/kaggle_3m/TCGA_CS_4943_20000902/"
-base_path4 = "../data/kaggle_3m/TCGA_CS_4944_20010208/"
-base_path5 = "../data/kaggle_3m/TCGA_CS_5393_19990606/"
-new_path = "../front-end/src/images/"
+PATH1 = "../data/kaggle_3m/TCGA_CS_4941_19960909/"
+PATH2 = "../data/kaggle_3m/TCGA_CS_4942_19970222/"
+PATH3 = "../data/kaggle_3m/TCGA_CS_4943_20000902/"
+PATH4 = "../data/kaggle_3m/TCGA_CS_4944_20010208/"
+PATH5 = "../data/kaggle_3m/TCGA_CS_5393_19990606/"
+DEFAULT_PATH = "../front-end/src/images/"
 
 
 def convert_file_in_folder(folder):
-    """Convert all files in the folder from tif to png format into frontend/images"""
+    """Conversion function"""
     for infile in os.listdir(folder):
         print("file : " + infile)
         read = cv2.imread(folder + infile)
         outfile = infile.split(".")[0] + ".png"
-        cv2.imwrite(new_path + outfile, read, [int(cv2.IMWRITE_JPEG_QUALITY), 200])
+        cv2.imwrite(DEFAULT_PATH + outfile, read, [int(cv2.IMWRITE_JPEG_QUALITY), 200])
 
 
-convert_file_in_folder(base_path1)
-convert_file_in_folder(base_path2)
-convert_file_in_folder(base_path3)
-convert_file_in_folder(base_path4)
-convert_file_in_folder(base_path5)
+convert_file_in_folder(PATH1)
+convert_file_in_folder(PATH2)
+convert_file_in_folder(PATH3)
+convert_file_in_folder(PATH4)
+convert_file_in_folder(PATH5)
