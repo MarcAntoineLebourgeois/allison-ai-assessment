@@ -1,43 +1,33 @@
 /** @jsxImportSource @emotion/react */
 import { css } from "@emotion/react";
+import { FormControl, InputLabel, MenuItem, Select } from "@mui/material";
 import { FC } from "react";
-import {
-  FormControl,
-  InputLabel,
-  MenuItem,
-  Select,
-  SelectChangeEvent,
-} from "@mui/material";
+import { usePatient } from "../hooks";
 
-type Props = {
-  tumorIndices: string[];
-  handleChange(event: SelectChangeEvent<string>): void;
-  tumorIndice?: string | null;
-};
-
-export const SelectTumorIndice: FC<Props> = ({
-  tumorIndices,
-  tumorIndice,
-  handleChange,
-}) => (
-  <FormControl
-    css={css`
-      width: 300px;
-    `}
-  >
-    <InputLabel>Please select a tumor indice</InputLabel>
-    <Select
-      labelId="demo-simple-select-label"
-      id="demo-simple-select"
-      value={tumorIndice || ""}
-      label="Age"
-      onChange={handleChange}
+export const SelectTumorIndice: FC = () => {
+  const { patient, tumorIndiceHandleChange } = usePatient();
+  const { tumorIndices, tumorIndice } = patient;
+  if (!tumorIndices) return null;
+  return (
+    <FormControl
+      css={css`
+        width: 300px;
+      `}
     >
-      {tumorIndices.map((indice) => (
-        <MenuItem key={indice} value={indice}>
-          {indice}
-        </MenuItem>
-      ))}
-    </Select>
-  </FormControl>
-);
+      <InputLabel>Please select a tumor indice</InputLabel>
+      <Select
+        labelId="demo-simple-select-label"
+        id="demo-simple-select"
+        value={tumorIndice || ""}
+        label="Age"
+        onChange={tumorIndiceHandleChange}
+      >
+        {tumorIndices.map((indice) => (
+          <MenuItem key={indice} value={indice}>
+            {indice}
+          </MenuItem>
+        ))}
+      </Select>
+    </FormControl>
+  );
+};

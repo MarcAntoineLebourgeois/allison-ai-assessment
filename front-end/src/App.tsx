@@ -1,108 +1,28 @@
-/** @jsxImportSource @emotion/react */
-import { css } from "@emotion/react";
-import { Button, SelectChangeEvent, Typography } from "@mui/material";
-import { useEffect, useState } from "react";
-import { SelectPatientId, SelectTumorIndice } from "./components";
-import { getHeaders, getTumorIndices } from "./helpers";
-import { data } from "./data";
-import { backEndHost } from "./config";
-import ResultImage from "./images/results.png";
+import { Typography } from "@mui/material";
+import {
+  ResetButton,
+  ResultImage,
+  SelectPatientId,
+  SelectTumorIndice,
+} from "./components";
 
-const App = () => {
-  const [patientId, setPatientId] = useState<string | null>();
-  const handleChange = (event: SelectChangeEvent<string>) =>
-    setPatientId(event.target.value as string);
-  const [tumorIndices, setTumorIndices] = useState<string[] | null>();
-  const [tumorIndice, setTumorIndice] = useState<string | null>();
-  const tumorIdHandleChange = (event: SelectChangeEvent<string>) =>
-    setTumorIndice(event.target.value as string);
-  const [isResultVisible, setIsResultVisible] = useState(false);
-  useEffect(() => {
-    if (patientId)
-      getTumorIndices(patientId).then((tumorIndices) =>
-        setTumorIndices(tumorIndices)
-      );
-  }, [patientId]);
+import { Layout } from "./components/Layout";
+import { PatientImage } from "./components/PatientImage";
+import { SubmitButton } from "./components/SubmitButton";
+import { PatientProvider } from "./context";
 
-  const [image, setImage] = useState<string | null>();
-
-  useEffect(() => {
-    if (tumorIndice && patientId) {
-      const imageName = `${
-        data[parseInt(patientId) - 1].patientId
-      }_${tumorIndice}`;
-      const fetchImage = async () => {
-        const response = await import(`./images/${imageName}.png`);
-        setImage(response.default);
-      };
-      fetchImage();
-    }
-  }, [tumorIdHandleChange]);
-
-  type Point = [number, number];
-
-  const [points, setPoints] = useState<Point[]>([]);
-  const onMouseClick = (
-    event: React.MouseEvent<HTMLImageElement, MouseEvent>
-  ) =>
-    setPoints((previousValue) => [
-      ...previousValue,
-      [event.nativeEvent.offsetY, event.nativeEvent.offsetX],
-    ]);
-
-  const onSubmit = (): Promise<void> =>
-    fetch(`${backEndHost}add_point_coordinates/${patientId}/${tumorIndice}`, {
-      method: "POST",
-      mode: "cors",
-      headers: getHeaders(),
-      body: JSON.stringify({ points }),
-    })
-      .then((response) => {
-        response.json();
-        setIsResultVisible(true);
-      })
-      .catch((error) => {
-        throw new Error(error);
-      });
-  const onReset = () => {
-    setPatientId(null);
-    setTumorIndices(null);
-    setTumorIndice(null);
-    setPoints([]);
-    setIsResultVisible(false);
-    setImage(null);
-  };
-
-  return (
-    <div
-      css={css`
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-      `}
-    >
+const App = () => (
+  <Layout>
+    <PatientProvider>
       <Typography variant="h4">Allison-AI-assessment</Typography>
-      <SelectPatientId patientId={patientId} handleChange={handleChange} />
-      {tumorIndices && (
-        <SelectTumorIndice
-          tumorIndices={tumorIndices}
-          tumorIndice={tumorIndice}
-          handleChange={tumorIdHandleChange}
-        />
-      )}
-      {image && <img src={image} onClick={onMouseClick} />}
-      {tumorIndice && (
-        <Button variant="contained" onClick={onSubmit}>
-          Click to submit your points
-        </Button>
-      )}
-      <Button variant="contained" onClick={onReset}>
-        Reset all settings
-      </Button>
-      {isResultVisible && <img src={ResultImage} />}
-    </div>
-  );
-};
+      <SelectPatientId />
+      <SelectTumorIndice />
+      <PatientImage />
+      <SubmitButton />
+      <ResetButton />
+      <ResultImage />
+    </PatientProvider>
+  </Layout>
+);
 
 export default App;
