@@ -4,11 +4,11 @@ import {
   ResultImage,
   SelectPatientId,
   SelectTumorIndice,
+  PatientImage,
+  SubmitButton,
 } from "./components";
 
 import { Layout } from "./components/Layout";
-import { PatientImage } from "./components/PatientImage";
-import { SubmitButton } from "./components/SubmitButton";
 import { PatientProvider } from "./context";
 
 const App = () => (
