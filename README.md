@@ -54,4 +54,9 @@ For front-end analysis, go to the front-end folder and run:
 yarn run check
 ```
 
+## Notes:
+
+- Please note that I never used python professionnally and I don't have the same habits/good practices as in Typescript. I am willing to learn them ;)
+- Remaining pylint feedbacks come from code from [https://github.com/imcohen/segment-brain-mri](https://github.com/imcohen/segment-brain-mri)
+
 I really hope you enjoy it :D
