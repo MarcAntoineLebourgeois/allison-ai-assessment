@@ -28,9 +28,11 @@ def convert_file_in_folder(folder):
         cv2.imwrite(DEFAULT_PATH + outfile, read, [int(cv2.IMWRITE_JPEG_QUALITY), 200])
 
 
-create_images_folder()
-convert_file_in_folder(PATH1)
-convert_file_in_folder(PATH2)
-convert_file_in_folder(PATH3)
-convert_file_in_folder(PATH4)
-convert_file_in_folder(PATH5)
+def convert_tif_to_png():
+    """Create the images folder and put converted png images into it"""
+    create_images_folder()
+    convert_file_in_folder(PATH1)
+    convert_file_in_folder(PATH2)
+    convert_file_in_folder(PATH3)
+    convert_file_in_folder(PATH4)
+    convert_file_in_folder(PATH5)

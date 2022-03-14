@@ -9,6 +9,7 @@ from flask_cors import CORS
 from skimage.measure import find_contours
 from scipy.ndimage.filters import gaussian_filter
 from sources.utils import read_mri, extract_curve
+from convert_tif_to_png import convert_tif_to_png
 
 app = Flask(__name__)
 CORS(app, resources={r"/*": {"origins": "*"}})
@@ -78,6 +79,8 @@ def add_point_coordinate(patient_index, tumor_indice):
     # plt.show()
     return "200"
 
+
+convert_tif_to_png()
 
 if __name__ == "__main__":
     app.debug = True
